@@ -1,0 +1,28 @@
+# vaultdragon code test
+
+This project was generated with the [Angular Full-Stack Generator](httpsgithub.comDaftMonkgenerator-angular-fullstack) version 4.1.0.
+
+## Getting Started
+
+### Prerequisites
+
+- [Git](httpsgit-scm.com)
+- [Node.js and npm](nodejs.org) Node = 8.x.x, npm = 3.x.x
+- [Gulp](httpgulpjs.com) (`npm install --global gulp`)
+- [MongoDB](httpswww.mongodb.org) - Keep a running daemon with `mongod`
+
+### Developing
+
+1. Run `npm install` to install server dependencies.
+
+2. Run `mongod` in a separate shell to keep an instance of the MongoDB Daemon running
+
+3. Run `gulp serve` to start the development server.
+
+## Build & development
+
+Run `gulp build` for building and `gulp serve` for preview.
+
+## Testing
+
+Running `npm test` will run the unit tests.
