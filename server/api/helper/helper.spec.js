@@ -27,6 +27,16 @@ describe('store helper:', function () {
       helper.isValidKeyValue(kv).should.equal(true);
     });
 
+    it('number as key should be valid', function () {
+      let kv = JSON.parse('{"0":"value"}');
+      helper.isValidKeyValue(kv).should.equal(true);
+    });
+
+    it('blank should be invalid', function () {
+      let kv = JSON.parse('{}');
+      helper.isValidKeyValue(kv).should.equal(false);
+    });
+
     it('nest object should be valid', function () {
       let kv = JSON.parse('{"key":{"nest":"nestvalue"}}');
       helper.isValidKeyValue(kv).should.equal(true);
@@ -34,6 +44,11 @@ describe('store helper:', function () {
 
     it('[{"key":"value"}] array should be invalid', function () {
       let kv = JSON.parse('[{"key":"value"}]');
+      helper.isValidKeyValue(kv).should.equal(false);
+    });
+
+    it('["key"] array should be invalid', function () {
+      let kv = JSON.parse('["key"]');
       helper.isValidKeyValue(kv).should.equal(false);
     });
   });

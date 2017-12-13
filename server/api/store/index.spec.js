@@ -10,7 +10,7 @@ var storeCtrlStub = {
 
 var routerStub = {
   get: sinon.spy(),
-  put: sinon.spy()
+  post: sinon.spy()
 };
 
 // require the index with our stubbed out modules
@@ -28,15 +28,15 @@ describe('Store API Router:', function() {
     storeIndex.should.equal(routerStub);
   });
 
-  describe('GET /api/stores/:id', function() {
+  describe('GET /api/store/:key', function() {
     it('should route to store.controller.show', function() {
       routerStub.get
-        .withArgs('/:id', 'storeCtrl.show')
+        .withArgs('/:key', 'storeCtrl.show')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('POST /api/stores', function() {
+  describe('POST /api/store', function() {
     it('should route to store.controller.create', function() {
       routerStub.post
         .withArgs('/', 'storeCtrl.create')

@@ -3,9 +3,7 @@
 import _ from 'lodash';
 import del from 'del';
 import gulp from 'gulp';
-import path from 'path';
 import gulpLoadPlugins from 'gulp-load-plugins';
-import http from 'http';
 import lazypipe from 'lazypipe';
 import nodemon from 'nodemon';
 
@@ -44,31 +42,6 @@ function onServerLog(log) {
     plugins.util.colors.yellow('nodemon') +
     plugins.util.colors.white('] ') +
     log.message);
-}
-
-function checkAppReady(cb) {
-  var options = {
-    host: 'localhost',
-    port: config.port
-  };
-  http
-    .get(options, () => cb(true))
-    .on('error', () => cb(false));
-}
-
-// Call page until first success
-function whenServerReady(cb) {
-  var serverReady = false;
-  var appReadyInterval = setInterval(() =>
-    checkAppReady((ready) => {
-      if (!ready || serverReady) {
-        return;
-      }
-      clearInterval(appReadyInterval);
-      serverReady = true;
-      cb();
-    }),
-    100);
 }
 
 /********************
@@ -312,11 +285,8 @@ gulp.task('build', cb => {
       'clean:tmp'
     ],
     'transpile:server', [
-      'build:images'
-    ], [
       'copy:server'
     ],
-    'revReplaceWebpack',
     cb);
 });
 

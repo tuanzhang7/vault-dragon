@@ -1,0 +1,40 @@
+version: '2'
+services:
+  nginx-proxy:
+    image: "jwilder/nginx-proxy"
+    ports:
+     - "80:80"
+     - "443:443"
+    labels:
+     - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
+    volumes:
+     - $HOME/certs:/etc/nginx/certs:ro
+     - /etc/nginx/vhost.d
+     - /usr/share/nginx/html
+     - ./custom_nginx_settings.conf:/etc/nginx/proxy.conf:ro
+     - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: unless-stopped
+
+  local-mongod:
+    ports:
+      - 27017:27017
+    image: "mongo"
+    restart: unless-stopped
+
+  store:
+    image: "registry.gitlab.com/tuanzhang/store"
+    container_name: store
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - nginx-proxy
+      - nginx-letsencrypt
+    links:
+     - local-mongod:local-mongod
+    environment:
+     - NODE_ENV=production
+     - PORT=3000
+     - VIRTUAL_HOST=175.156.214.130
+     - MONGODB_ATLAS_URL=mongodb://local-mongod:27017/store
+    restart: unless-stopped

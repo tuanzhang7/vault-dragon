@@ -1,5 +1,4 @@
 /**
- * Using Rails-like standard naming convention for endpoints.
  * GET     /api/stores              ->  index
  * POST    /api/stores              ->  create
  * GET     /api/stores/:id          ->  show
@@ -8,7 +7,7 @@
 'use strict';
 
 import Store from './store.model';
-import helper from './helper';
+import helper from '../helper/helper';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;

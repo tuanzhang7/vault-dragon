@@ -1,37 +1,37 @@
 'use strict';
-
+/* eslint-env mocha */
 var app = require('../..');
 import request from 'supertest';
 
 var newStore;
 
 describe('Store API:', function() {
-  describe('GET /api/stores', function() {
-    var stores;
+  describe('GET /api/store', function() {
+    var store;
 
     beforeEach(function(done) {
       request(app)
-        .get('/api/stores')
+        .get('/api/store')
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
           if(err) {
             return done(err);
           }
-          stores = res.body;
+          store = res.body;
           done();
         });
     });
 
     it('should respond with JSON array', function() {
-      stores.should.be.instanceOf(Array);
+      store.should.be.instanceOf(Array);
     });
   });
 
-  describe('POST /api/stores', function() {
+  describe('POST /api/store', function() {
     beforeEach(function(done) {
       request(app)
-        .post('/api/stores')
+        .post('/api/store')
         .send({
           name: 'New Store',
           info: 'This is the brand new store!!!'
@@ -53,12 +53,12 @@ describe('Store API:', function() {
     });
   });
 
-  describe('GET /api/stores/:id', function() {
+  describe('GET /api/store/:id', function() {
     var store;
 
     beforeEach(function(done) {
       request(app)
-        .get(`/api/stores/${newStore._id}`)
+        .get(`/api/store/${newStore._id}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
