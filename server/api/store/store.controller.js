@@ -8,6 +8,7 @@
 'use strict';
 
 import Store from './store.model';
+import helper from './helper';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -38,7 +39,17 @@ function handleError(res, statusCode) {
 
 // Gets a single Store from the DB
 export function show(req, res) {
-  return Store.findById(req.params.id).exec()
+  let query = {};
+  query.key = req.params.key;
+  let time = Number(req.query.timestamp) * 1000;
+  if(time){
+    query.timestamp = {
+      $lte: new Date(time)
+    };
+  }
+  return Store.findOne(query)
+    .sort({ timestamp: -1})
+    .exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -46,9 +57,20 @@ export function show(req, res) {
 
 // Creates a new Store in the DB
 export function create(req, res) {
-  return Store.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
+  if (helper.isValidKeyValue(req.body)){
+    let key = Object.keys(req.body)[0];
+    let value = JSON.stringify(req.body[key]);
+    let store = {
+      key,
+      value
+    };
+    return Store.create(store)
+      .then(respondWithResult(res, 201))
+      .catch(handleError(res));
+  }else{
+    res.statusMessage = 'invalid Key Value input, please correct it.';
+    return res.status(400).end();
+  }
 }
 
 

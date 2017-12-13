@@ -29,12 +29,12 @@ var server = http.createServer(app);
 require('./config/express').default(app);
 require('./routes').default(app);
 
+console.log('before startServer');
 // Start server
 function startServer() {
-  app.server = server.listen(config.port, config.ip, function() {
+  app.store = server.listen(config.port, config.ip, function() {
     console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
     console.log('mongoose.connection.db ' + config.mongo.uri);
-    console.log('session-store:' + config.sessionStoreMongod.uri);
   });
 }
 

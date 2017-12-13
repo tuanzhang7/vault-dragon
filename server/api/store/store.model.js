@@ -12,9 +12,9 @@ var StoreSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  timestamp: { 
-    type: Date, 
-    required: true
+  timestamp: {
+    type: Date
+    // required: true
     // default: Date.now
   }
 });
@@ -27,8 +27,8 @@ StoreSchema.index({ key: 1, timestamp: 1 });
 
 // for testing, can mock any date here
 StoreSchema.pre('save', function (next) {
-  if (!this.createdAt) {
-    this.createdAt = new Date();
+  if (!this.timestamp) {
+    this.timestamp = new Date();
   }
   next();
 });

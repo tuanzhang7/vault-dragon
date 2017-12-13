@@ -4,7 +4,6 @@ import _ from 'lodash';
 import del from 'del';
 import gulp from 'gulp';
 import path from 'path';
-import through2 from 'through2';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import http from 'http';
 import lazypipe from 'lazypipe';
@@ -190,8 +189,13 @@ gulp.task('clean:tmp', () => del(['.tmp/**/*'], {
 gulp.task('start:server', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
   config = require(`./${serverPath}/config/environment`);
-  nodemon(`-w ${serverPath} ${serverPath}`)
-    .on('log', onServerLog);
+  // nodemon(`-w ${serverPath} ${serverPath}`)
+  //   .on('log', onServerLog);
+  nodemon('-w server server');
+  // nodemon({
+  //   watch: ['server/'],
+  //   script: 'server/index.js',
+  // });
 });
 
 gulp.task('start:server:prod', () => {
@@ -208,15 +212,8 @@ gulp.task('start:inspector', () => {
     }));
 });
 
-gulp.task('start:server:debug', () => {
-  process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-  config = require(`./${serverPath}/config/environment`);
-  nodemon(`-w ${serverPath} --debug=5858 --debug-brk ${serverPath}`)
-    .on('log', onServerLog);
-});
-
 gulp.task('watch', () => {
-  var testFiles = _.union(paths.client.test, paths.server.test.unit, paths.server.test.integration);
+  var testFiles = _.union(paths.server.test.unit, paths.server.test.integration);
 
   plugins.watch(_.union(paths.server.scripts, testFiles))
     .pipe(plugins.plumber())
@@ -231,11 +228,11 @@ gulp.task('serve', cb => {
   runSequence(
     [
       'clean:tmp',
-      // 'lint:scripts',
+      'lint:scripts',
       'env:all'
     ],
     ['start:server'],
-    // 'watch',
+    'watch',
     cb
   );
 });
@@ -249,7 +246,7 @@ gulp.task('serve:dist', cb => {
 });
 
 gulp.task('test', cb => {
-  return runSequence('test:server', 'test:client', cb);
+  return runSequence('test:server', cb);
 });
 
 gulp.task('test:server', cb => {
@@ -294,15 +291,13 @@ gulp.task('coverage:pre', () => {
 gulp.task('coverage:unit', () => {
   return gulp.src(paths.server.test.unit)
     .pipe(mocha())
-    .pipe(istanbul())
-    // Creating the reports after tests ran
+    .pipe(istanbul());
 });
 
 gulp.task('coverage:integration', () => {
   return gulp.src(paths.server.test.integration)
     .pipe(mocha())
-    .pipe(istanbul())
-    // Creating the reports after tests ran
+    .pipe(istanbul());
 });
 
 
@@ -331,10 +326,9 @@ gulp.task('clean:dist', () => del([`${paths.dist}/!(.git*)**`], {
 
 gulp.task('copy:server', () => {
   return gulp.src([
-      'package.json'
-    ], {
-      cwdbase: true
-    })
-    .pipe(gulp.dest(paths.dist));
+    'package.json'
+  ], {
+    cwdbase: true
+  }).pipe(gulp.dest(paths.dist));
 });
 

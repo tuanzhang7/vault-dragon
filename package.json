@@ -4,7 +4,10 @@
   "description": "vaultdragon code test",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test",
+    "start": "node server",
+    "start-server": "nodemon -w server server",
+    "mocha-unit": "mocha server/**/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +33,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-flow-comments": "^6.22.0",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -47,8 +51,11 @@
     "gulp-istanbul-enforcer": "^1.0.3",
     "gulp-load-plugins": "^1.5.0",
     "gulp-mocha": "^4.3.1",
+    "gulp-plumber": "^1.1.0",
     "gulp-protractor": "^4.1.0",
     "gulp-sourcemaps": "^2.6.1",
+    "gulp-util": "^3.0.8",
+    "gulp-watch": "^4.3.11",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.5",
     "lazypipe": "^1.0.1",

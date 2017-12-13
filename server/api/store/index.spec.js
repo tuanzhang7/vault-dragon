@@ -1,5 +1,6 @@
 'use strict';
-
+/* eslint-env mocha */
+import sinon from 'sinon';
 var proxyquire = require('proxyquire').noPreserveCache();
 
 var storeCtrlStub = {
